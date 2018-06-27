@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import re
 
 bot = commands.Bot(command_prefix='$', description='Bot for check player info')
-
+bot.remove_command('help')
 
 @bot.event
 async def on_ready():
@@ -15,11 +15,16 @@ async def on_ready():
     print('------')
 
 
-@bot.command()
-async def about(ctx):
-    em = discord.Embed(title='About', description='Hello, type $short "nickname" for short info and $more "nickname" for other information.', colour=0xDEADBF)
+@bot.command(pass_contex=True)
+async def help(ctx):
+    author=ctx.message.author
+    em = discord.Embed(colour=discord.Colour.orange()
+    )
     em.set_author(name='DivisionTrackBot')
-    await ctx.send(embed=em)
+    em.add_field(name='.help', value='Hello i am DivisionTrackBot, originally made for M8 clan Discord server\
+    .\nComands:\n$short for getting short info about player\
+    \n$more for get more info.\nExample: $short M8.DRAFT_PUNK.')
+    await ctx.send(author, embed=em)
 
 
 @bot.command()
@@ -118,4 +123,4 @@ class DivisionBotFull():
             return ('No information')
 
 
-bot.run('placetokenofbotthere')
+bot.run('placeyourbottokenhere')
