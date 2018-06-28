@@ -21,17 +21,16 @@ async def help(ctx):
     em = discord.Embed(colour=discord.Colour.orange()
     )
     em.set_author(name='DivisionTrackBot')
-    em.add_field(name='.help', value='Hello i am DivisionTrackBot, originally made for M8 clan Discord server\
-    .\nComands:\n$short for getting short info about player\
-    \n$more for get more info.\nExample: $short M8.DRAFT_PUNK.')
+    em.add_field(name='.help', value='Hello i am DivisionTrackBot, originally made for M8 clan Discord server\n**Comands**:\n**$short** for getting short info about player.\
+    \n**$more** for get more info.\n**$all** for complete info\nExample: $short M8.DRAFT_PUNK.')
     await ctx.send(author, embed=em)
 
 
 @bot.command()
 async def short(ctx, nickname):
-    em = discord.Embed(title='Short', description=str(DivisionBot(nickname)), colour=0xDEADBF)
+    em = discord.Embed(description=str(DivisionBot(nickname)), colour=0xDEADBF)
     em.set_author(name='DivisionTrackBot')
-    await ctx.send('Checking...')
+    await ctx.send('Checking...🤔')
     if nickname == 'Ghost--__--':
         await ctx.send('Sorry, Ghost Loh')
     else:
@@ -40,13 +39,27 @@ async def short(ctx, nickname):
 
 @bot.command()
 async def more(ctx, nickname):
-    em = discord.Embed(title='Short', description=str(DivisionBotFull(nickname)), colour=0xDEADBF)
+    em = discord.Embed(description=str(DivisionBotFull(nickname)), colour=0xDEADBF)
     em.set_author(name='DivisionTrackBot')
-    await ctx.send('Checking...')
+    await ctx.send('Checking...🤔')
     if nickname == 'Ghost--__--':
         await ctx.send('Sorry, Ghost Loh')
     else:
         await ctx.send(embed=em)
+
+@bot.command()
+async def all(ctx, nickname):
+    em = discord.Embed(description='**Nickname**: {}'.format(nickname), colour=0xDEADBF)
+    em1 = discord.Embed(description=str(DivisionBot(nickname)), colour=0xDEADBF)
+    em2 = discord.Embed(description=str(DivisionBotFull(nickname)), colour=0xDEADBF)
+    em.set_author(name='DivisionTrackBot')
+    await ctx.send('Checking...🤔')
+    if nickname == 'Ghost--__--':
+        await ctx.send('Sorry, Ghost Loh')
+    else:
+        await ctx.send(embed=em)
+        await ctx.send(embed=em1)
+        await ctx.send(embed=em2)
 
 
 class DivisionBot():
@@ -61,7 +74,8 @@ class DivisionBot():
             if day.find(text=re.compile('Playtime')):
                 theday = day
                 break
-        return theday.find('div', attrs={'class': 'value'}).text
+        not_form_days = theday.find('div', attrs={'class': 'value'}).text
+        return ''.join(not_form_days.splitlines())
 
     def rogues_killed(self):
         rogues = self.soup.body.find_all('div', attrs={'class': 'stats-stat'})
@@ -73,7 +87,7 @@ class DivisionBot():
 
     def __repr__(self):
         try:
-            return ('Playtime:%sRogue Players Killed:\n%s' % (self.days(), self.rogues_killed()))
+            return ('**Playtime**: {}\n**Rogue Players Killed**: {}'.format(self.days(), self.rogues_killed()))
         except UnboundLocalError:
             return ('No information')
 
@@ -118,9 +132,9 @@ class DivisionBotFull():
 
     def __repr__(self):
         try:
-            return('Darkzone Level:\n%s\nKills\n%s\nHard Missions:\n%s\nChallenge Missions:\n%s' % (self.dz_level(), self.kills(), self.hard(), self.challenge()))
+            return('**Darkzone Level**: {}\n**Kills**: {}\n**Hard Missions**: {}\n**Challenge Missions**: {}'.format(self.dz_level(), self.kills(), self.hard(), self.challenge()))
         except UnboundLocalError:
             return ('No information')
 
 
-bot.run('placeyourbottokenhere')
+bot.run('placeyoubottokenhere')
